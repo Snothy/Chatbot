@@ -1,5 +1,6 @@
 #Discord and asyncio docs: https://github.com/Rapptz/discord.py/blob/async/examples/basic_bot.py #https://discordpy.readthedocs.io/en/rewrite/index.html
 #Googletrans docs: https://pypi.org/project/googletrans/, https://py-googletrans.readthedocs.io/en/latest/
+#Fixed googletrans error through : https://github.com/ssut/py-googletrans/issues/93
 import discord, asyncio, random, requests
 from discord.ext import commands
 from discord.ext.commands import Bot, Context
