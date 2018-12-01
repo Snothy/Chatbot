@@ -1,4 +1,4 @@
-import discord, asyncio, random, requests, urllib.request, json, fuzzywuzzy, re
+import discord, asyncio, random, requests, urllib.request, json, re, wikipedia
 from discord.ext import commands
 from discord.ext.commands import Bot
 from googletrans import Translator, LANGUAGES
@@ -19,6 +19,7 @@ cat_input = ["cat", "cats", "neko", "kitten"]
 places_input = ["show", "places"]
 directions_input = ["directions", "way", "path"]
 dictionary_input = ["definition", "define"]
+wikipedia_input = ["wiki", "wikipedia", "search"]
 removal_list = ["," , "?", "!", ".", "to", "please", "in", " "]
 function_list = []
 #Weather
@@ -205,6 +206,21 @@ async def dictionary(message):
     await bot.send_message(message.channel, (data["results"][0]["lexicalEntries"][0]["entries"][0]["grammaticalFeatures"][0]["text"]))
     function_list.append("called")
 
+async def wiki(message):
+    if len(function_list) != 0:
+        return
+    msglist = message.content.lower().split(" ")
+    argument = '+'.join(msglist[1:len(msglist)])
+    try:
+        definition = wikipedia.summary(argument, sentences = 2)
+        wikiURL = wikipedia.page(argument)
+    except:
+        bot.send_message(message.channel, "Example message : 'Wikipedia World War 2'")
+        print("bad sentence formatting")
+    await bot.send_message(message.channel, definition)
+    await bot.send_message(message.channel, wikiURL.url)
+    function_list.append("called")
+
 
 async def directions(message):
     #we assume the format is - directions from (location) to (location)
@@ -265,6 +281,9 @@ async def on_message(message):
     for word in dictionary_input:
         if word in message.content:
             await dictionary(message)
+    for word in wikipedia_input:
+        if word in message.content:
+            await wiki(message)
     if len(function_list) == 0:
         await chat(message)
     else:
